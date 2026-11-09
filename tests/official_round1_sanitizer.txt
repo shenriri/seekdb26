@@ -1,0 +1,14 @@
+Internal ctest changing into directory: /mnt/data/MiniVectorDB_official_round1/build_san
+Test project /mnt/data/MiniVectorDB_official_round1/build_san
+    Start  1: integration
+    Start  2: fault_injection
+1/9 Test  #1: integration ......................   Passed    1.02 sec
+    Start  3: randomized_differential
+2/9 Test  #2: fault_injection ..................   Passed    1.11 sec
+    Start  6: wal_rotation
+3/9 Test  #6: wal_rotation .....................   Passed    1.24 sec
+    Start  7: ann_transactional
+4/9 Test  #3: randomized_differential ..........   Passed    1.45 sec
+    Start  8: compaction_and_crash
+5/9 Test  #7: ann_transactional ................   Passed    1.61 sec
+    Start  9: vector_scan_cache

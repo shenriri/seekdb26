@@ -1,0 +1,604 @@
+{
+  "schema_version": "1",
+  "synthetic": false,
+  "scope": "Original phase1-6 user prompts and tool observations are preserved as historical records. local_validation_20261109 records later actual Windows Docker execution and supersedes historical statements that Docker/cgroup validation had not run. Student understanding is not inferred.",
+  "user_prompts": [
+    {
+      "id": "user-1",
+      "source": "student",
+      "content": "根据具体开发方案开始一步步执行实现这个题目，在实现过程中注意真正的技术难点和性能测试"
+    },
+    {
+      "id": "user-2",
+      "source": "student",
+      "content": "继续下一阶段"
+    },
+    {
+      "id": "user-3",
+      "source": "student",
+      "content": "继续下一阶段"
+    },
+    {
+      "id": "user-4",
+      "source": "student",
+      "content": "继续下一阶段"
+    },
+    {
+      "id": "user-official-public-20261109",
+      "source": "student",
+      "content": "https://github.com/oceanbase/seekdb/tree/a3dba559c1e7ebdc48bc990ffb1a4c75d1c1075c/mysqltest 官方提测包如上，重新开始测评进行性能优化"
+    },
+    {
+      "id": "user-phase6-continue-opt",
+      "source": "student",
+      "content": "继续优化直到优化点全部完成，性能到达最好"
+    }
+  ],
+  "experiments": [
+    {
+      "id": "tool-compile-tests",
+      "source": "tool",
+      "command": "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j2 && ctest --test-dir build --output-on-failure",
+      "output": "100% tests passed, 0 tests failed out of 3: integration, fault_injection, randomized_differential."
+    },
+    {
+      "id": "tool-sanitizer-tests",
+      "source": "tool",
+      "command": "Debug CMake with -fsanitize=address,undefined, followed by ctest",
+      "output": "100% tests passed, 0 tests failed out of 3."
+    },
+    {
+      "id": "tool-local-benchmark",
+      "source": "tool",
+      "command": "python3 tests/benchmark.py ./build/minivectordb --n 10000 --d 128 --q 1000 --verify 100",
+      "output": "Late-materialized prototype: write 1.127331s, query 1.156181s, 864.92 QPS; 100 sampled independent numpy truth checks, Recall@10 no filter 1.0, filter 1.0; sampled process RSS 10264576 bytes, process I/O 5894144 bytes. Not official cgroup metrics."
+    },
+    {
+      "id": "tool-ab-optimization",
+      "source": "tool",
+      "command": "Three alternating runs of early-formatting version and late-materialization version, n=10000 d=128 q=1000",
+      "output": "Early-formatting query seconds [1.236894,1.294285,1.324779], median 1.294285. Late-materialization seconds [1.078589,1.053667,1.111960], median 1.078589. Observed query speedup 1.20x. No reproducible write improvement demonstrated."
+    },
+    {
+      "id": "tool-phase2-ctest",
+      "source": "tool",
+      "command": "cmake build Release and ctest --output-on-failure -j3",
+      "output": "6/6 tests passed: integration, fault_injection, randomized_differential, disk_btree_stress, bounded_memory, deep_btree."
+    },
+    {
+      "id": "tool-phase2-memory",
+      "source": "tool",
+      "command": "python3 tests/test_bounded_memory.py ./build/minivectordb",
+      "output": "PASS: 50000 x 128, heap=27350000 bytes, index=10723328 bytes, sampled_RSS=13807616 bytes, write_seconds=4.408, restart primary-key lookup."
+    },
+    {
+      "id": "tool-phase2-btree",
+      "source": "tool",
+      "command": "python3 tests/test_deep_btree.py ./build/minivectordb",
+      "output": "PASS: 110000 B+Tree inserts with internal splits, update/delete, restart, index 28491776 bytes."
+    },
+    {
+      "id": "tool-phase2-recall",
+      "source": "tool",
+      "command": "3 alternating rounds, each python3 tests/benchmark.py BIN --n 10000 --d 128 --q 1000 --verify 100",
+      "output": "Phase1 median write=1.099036s/query=1.110225s/process_io=5890048 bytes/sample_RSS=10268672 bytes; Phase2 median write=1.366931s/query=1.212084s/process_io=14290944 bytes/sample_RSS=11649024 bytes. Sampled Recall@10 both groups=1.0. Local, not official cgroup metrics."
+    },
+    {
+      "id": "tool-phase2-sanitizers",
+      "source": "tool",
+      "command": "CMake Debug with -fsanitize=address,undefined and ctest",
+      "output": "4/4 existing suites passed under sanitizers; two larger suites tested in Release."
+    },
+    {
+      "id": "tool-phase3-compile-tests",
+      "source": "tool",
+      "command": "cmake Release build; ctest --output-on-failure -j3",
+      "output": "8/8 Release tests passed, including two new ANN and WAL rotation suites."
+    },
+    {
+      "id": "tool-phase3-ann-correctness",
+      "source": "tool",
+      "command": "tests/test_ann_index.py with MVDB_ANN_FORCE_INDEX=1 and MVDB_ANN_PROBES=64",
+      "output": "PASS: IVF build, transactions, rollback, updates/deletes, persisted sidecar, restarts, forced crash after primary manifest, corrupt sidecar rebuild."
+    },
+    {
+      "id": "tool-phase3-wal-rotation",
+      "source": "tool",
+      "command": "MVDB_CHECKPOINT_BYTES=1024; tests/test_wal_rotation.py",
+      "output": "PASS: generations rotate, old WAL files reclaimed, committed rows survive SIGKILL before/after WAL-generation manifest, ANN full-probe results preserved."
+    },
+    {
+      "id": "tool-phase3-performance",
+      "source": "tool",
+      "command": "3 alternating runs of 10K×128, 1000 TopK, filtered/unfiltered with and without IVF + cost guard",
+      "output": "Exact median query 1.194406s/process I/O 14290944 B; ANN+cost guard median query 1.191224s/process I/O 19845120 B, index build median 0.662905s; both sampled Recall@10 1.0/1.0. Local not official metrics."
+    },
+    {
+      "id": "tool-phase3-forced-ivf-recall",
+      "source": "tool",
+      "command": "MVDB_ANN_FORCE_INDEX=1; 10K×128 100 queries; --probes 8 versus 64",
+      "output": "8 probes: 2.352586s/100 queries, Recall@10 0.434 no filter, 0.398 filtered (fails 0.95). 64 probes: 10.869034s/100, recall 1.0 both. Actual IVF is slower than exact at this workload."
+    },
+    {
+      "id": "tool-phase3-asan",
+      "source": "tool",
+      "command": "ASan/UBSan Debug build; 6 test suites (excluding two large stress tests)",
+      "output": "6/6 tests passed under sanitizers."
+    },
+    {
+      "id": "tool-phase4-compaction",
+      "source": "tool",
+      "command": "cmake Release; ctest --test-dir build --output-on-failure -j4; test_compaction.py",
+      "output": "9/9 Release suites passed. Full compaction SIGKILL before/after manifest, 110000-key B+Tree rebuild, and ANN index generation rebuild passed. In targeted repeated-update test, heap 255498 -> 76611 bytes, index 1212416 -> 65536 bytes, IVF postings 200320 -> 78480 bytes."
+    },
+    {
+      "id": "tool-phase4-pk-benchmark",
+      "source": "tool",
+      "command": "benchmark_pk_lookup.py phase3_binary phase4_binary; 10000 rows, 500 queries, three alternating measurements",
+      "output": "Phase 3 PK lookup seconds [0.164208,0.154099,0.160019], median 0.160019. Phase 4 direct B+Tree lookup [0.018517,0.018128,0.018599], median 0.018517, observed speedup 8.64x; returned results identical."
+    },
+    {
+      "id": "tool-phase4-topk-benchmark",
+      "source": "tool",
+      "command": "6 alternating calls of benchmark.py --n 10000 --d 128 --q 1000 --verify 80",
+      "output": "Phase 3 write/query median=1.464504/1.313547s. Phase 4 write/query median=1.550168/1.367001s. Each of 6 runs verified sampled Recall@10=1.0 for filtered and unfiltered. Local, nonofficial."
+    },
+    {
+      "id": "tool-phase4-rejected-opt",
+      "source": "tool",
+      "command": "A/B six runs of bounded squared-L2 vs original ranking",
+      "output": "Squared-L2 bounded-cutoff TopK median 1.485787s vs original 1.426812s, slower; code reverted and 9/9 tests passed again."
+    },
+    {
+      "id": "tool-phase4-sanitizers",
+      "source": "tool",
+      "command": "ASan+UBSan Debug ctest excluding 2 large suites",
+      "output": "7/7 suites passed including compaction crash. Full sanitizer run timed out with two large stress suites incomplete; do not claim 9/9 sanitizer passed."
+    },
+    {
+      "id": "tool-official-public-case",
+      "source": "tool",
+      "command": "GitHub connector fetch_file at a3dba559...; git hash-object for all five .test files; Python test adapter and CTest",
+      "output": "Official public basic v1 has 5 cases/32 SQL. The five SQL .test files matched the Git blob SHA; all 32 assertions passed with the independent structured result adapter after implementing affected_rows. Official reference .result JSON assertions are preserved in reserialized form."
+    },
+    {
+      "id": "tool-simd-scoring-bench",
+      "source": "tool",
+      "command": "3 alternating A/B rounds, MVDB_SIMD_PRUNE=0/1, 10k x128 float32, 1000 TopK, 500 filtered, K=10, 100 NumPy recall samples each run",
+      "output": "Median query 0.945611s off vs 0.442323s on (2.137829x); write 1.400719s off vs 1.361392s on; process I/O median 14290944 bytes both; sampled RSS 17858560 vs 17870848 bytes; both sampled Recall@10 groups 1.0."
+    },
+    {
+      "id": "tool-simd-differential",
+      "source": "tool",
+      "command": "C++ SIMD AVX2 upper-bound screening + canonical scalar rescore; test_simd_exact.py and CTest",
+      "output": "Exact SIMD vs scalar output identical for 105 SQL statements including random/equal-distance/borderline vectors, WHERE filters, UPDATE/DELETE, ROLLBACK. Complete Release CTest 12/12 passed."
+    },
+    {
+      "id": "tool-sanitizer-limit",
+      "source": "tool",
+      "command": "ASan/UBSan Debug selected CTest (7 cases) and attempted expanded batch",
+      "output": "Seven selected sanitizer suites passed, including official_public_basic_cases, simd_exact_differential, integration, fault_injection, randomized_differential, wal_rotation, ann_transactional. Expanded 9-case sanitizer run timed out before completing compaction_and_crash/vector_scan_cache; do not claim full sanitizer completion."
+    },
+    {
+      "id": "tool-phase6-final-ctest",
+      "source": "tool",
+      "command": "cmake Release build; ctest -j4",
+      "output": "15/15 local Release tests passed including official_public_basic_cases, mapped_vector_forced, mapped_vector_large, pk_btree_range, compaction and WAL tests."
+    },
+    {
+      "id": "tool-phase6-final-sanitizer",
+      "source": "tool",
+      "command": "ASan/UBSan Debug -O0 -g0; selected ctest -j3",
+      "output": "7/7 selected sanitizer tests passed including forced mmap, PK range, official public, SIMD exact, integration, fault injection, vector cache; large Sanitizer scenarios timed out, not counted."
+    },
+    {
+      "id": "tool-phase6-official-public",
+      "source": "tool",
+      "command": "python3 tests/run_official_public.py ./build/mvdb_public_case_adapter ./official_mysqltest",
+      "output": "Published upstream minivectordb-public-basic-v1 samples 5/5 groups, 32/32 SQL assertions passed; local adapter, not hidden runner."
+    },
+    {
+      "id": "tool-phase6-final-10k-ab",
+      "source": "tool",
+      "command": "3 alternating independent trials: previous frozen phase5 binary vs new binary, benchmark.py n10000 d128 q1000 verify100",
+      "output": "Previous median write/query 1.339591/0.435708s; new 1.318732/0.341263s; query 1.27675x faster. IO 14290944 vs 14295040 bytes; sampled RSS 17866752 vs 17903616 bytes; both sampled recall groups 1.0; NONOFFICIAL."
+    },
+    {
+      "id": "tool-phase6-large25k-ab",
+      "source": "tool",
+      "command": "tests/benchmark_large_scan.py --rows 25000 --queries 20 --varchar",
+      "output": "Old per-query decode times 6.7155/6.9003s; bounded mmap 0.1246/0.1242s; about 54.7x; results identical including post-commit updates/deletes, restart."
+    },
+    {
+      "id": "tool-phase6-100k-independent-oracle",
+      "source": "tool",
+      "command": "tests/benchmark_large_scan.py --rows 100000 --queries 20 --varchar --mapped-only",
+      "output": "100K 128D float32 heap 55,550,000 bytes, mapped RSS 63-64MB; independent exact oracle 20/20; low-cardinality postings 0.1101->0.0539s on 20 queries. No old full-scan A/B at 100K."
+    },
+    {
+      "id": "tool-phase6-pk-range-ab",
+      "source": "tool",
+      "command": "tests/benchmark_pk_range.py; 20K rows, 300 PK ORDER BY/LIMIT queries, 3 alternating rounds",
+      "output": "Legacy median 2.716478s vs B+Tree bounded scan 0.023295s, 116.6x; results identical. Independent PK edge-case differential passes."
+    },
+    {
+      "id": "tool-phase6-fma-ab",
+      "source": "tool",
+      "command": "tests/bench_fma_ab.py --n 10000 --d 128 --q 1000, 3 alternating trials",
+      "output": "FMA median 0.443745s vs AVX2 nonFMA 0.469208s; speedup 1.057x (separate experiment; not to be multiplied into final A/B)."
+    },
+    {
+      "id": "tool-phase6-prepared-ab",
+      "source": "tool",
+      "command": "tests/bench_prepared_ab.py, 3 alternating trials",
+      "output": "Query hoisting of float64 SIMD query median 0.379324s vs 0.446273s, +17.6%; sampled Recall@10 both 1.0."
+    },
+    {
+      "id": "tool-phase6-avx512-ab",
+      "source": "tool",
+      "command": "tests/bench_avx512_ab.py, 3 alternating trials",
+      "output": "AVX512F/FMA prefilter median 0.360549s vs AVX2-prepared 0.414038s, +14.8%; independent compare 106 SQL statements, all SIMD variants matched scalar."
+    }
+  ],
+  "retrospective": [
+    {
+      "source": "agent",
+      "content": "The first implementation is an in-memory row map with an append-only committed WAL. It exercises statement atomicity and recovery, but cannot satisfy the formal over-memory storage tests. P2 must replace it with bounded disk pages, a PK index, and checkpointing."
+    },
+    {
+      "source": "agent",
+      "content": "New disk-backed primary B+Tree and bounded caches remove O(N) committed-row residency. Query exact recall remains correct in sampled tests. COW requires page coalescing to avoid high I/O write amplification. Phase2 has a small 10k benchmark latency/I/O/RSS regression relative to Phase1; this is a measured design tradeoff, not a speed win. Official cgroup metrics and ANN indexing remain unfinished."
+    },
+    {
+      "source": "agent",
+      "content": "Disk IVF-Flat is now implemented and transactionally reconciled with the primary B+Tree. In 128D random data, probing 8/64 partitions does not meet recall; probing 64/64 is far slower than exact scan. A cost guard uses exact scan on the benchmark scale while preserving explicit ANN path for experiments. WAL generational recycling is crash-safe in local failpoint tests, but heap and COW index page reclamation still need implementation."
+    },
+    {
+      "source": "agent",
+      "content": "Official first public SQL cases exposed a result-metadata gap: successful DML had no affected_rows field. Added affected_rows to core Result and a local structured adapter without guessing the organizer stdin/stdout protocol. AVX2 is only a conservative screening stage; canonical scalar L2 still ranks borderline candidates, protecting exact correctness. Performance improvement applies to in-memory dense scan below the cache budget; data exceeding that budget still uses slower disk traversal. Physical cgroup v2 I/O/memory and hidden acceptance remain unverified."
+    }
+  ],
+  "limitations": [
+    "Official second-round SQL driver, exact errors, readiness marker, ANN selector and frozen resource limits have not been verified.",
+    "Only genuine user prompt, tool observations and agent retrospective were included; no independent student interpretation or experimental reflections have been invented.",
+    "Large explicit WriteSet and unbounded SELECT result may allocate beyond fixed cache limits.",
+    "Only local process RSS and I/O, no isolated cgroup v2 memory.peak/io.stat; Docker image not built.",
+    "No team GitHub branch creation/push because connected integration returned 403.",
+    "Vector index and WAL generation recycling are implemented; heap and COW B+Tree old-page compaction are NOT implemented.",
+    "True IVF-Flat at 8/64 probes falls below Recall@10=0.95; default cost planner selects exact for 10K benchmark, not ANN acceleration.",
+    "The student did not provide their own quantitative interpretation of these tool results; tool observations and agent commentary alone do not establish student learning evidence.",
+    "Official public mysqltest directory provides basic SQL/expected JSON only. The private run_case.py, complete test driver protocol, hidden cases, frozen performance baseline, Docker validation and cgroup metrics are still unavailable here.",
+    {
+      "source": "assistant",
+      "content": "Phase6 local performance best among tested options, not proven globally optimal. Hidden admission suite, official runner, cgroup v2 IO/memory and Docker image unverified; remote GitHub branch write remains blocked."
+    }
+  ],
+  "local_validation_20261109": {
+    "source": "tool",
+    "summary": {
+      "classification": "local_validation_not_official_admission_or_score",
+      "official_test_commit": "9f6df2ba5acf871376e22b64a3d0724e4b575044",
+      "public_cases": "20/20",
+      "public_sql": "95/95",
+      "ctest": "15/15",
+      "production_smoke_and_restart": "passed",
+      "transport_checks": "21/21",
+      "benchmark": {
+        "rounds": 3,
+        "mode": "exact",
+        "rows": 10000,
+        "dimension": 128,
+        "queries_per_round": 1000,
+        "recall_queries_verified_per_round": 1000,
+        "cpus": 2,
+        "memory": "2GiB",
+        "pids": 256,
+        "swap": false,
+        "data_storage": "independent Docker Linux volumes"
+      },
+      "official_protocol_compatibility": "not_verified; current public branch has no complete stdin/stdout driver",
+      "known_limits": [
+        "in-memory transaction write set",
+        "64MiB serialized transaction limit",
+        "over-cgroup-memory data test not completed",
+        "formal dependency freeze pending"
+      ]
+    },
+    "public_case_output": "sql_crud: 7/7\nsql_comparisons: 4/4\nsql_ordering: 4/4\nsql_empty: 3/3\nsql_primary_key: 4/4\nsql_unicode: 3/3\nsql_bigint: 3/3\nsql_unsupported: 3/3\nstorage_restart: 3/3\nvector_euclidean: 3/3\ntransaction_commit: 6/6\ntransaction_rollback: 6/6\nstorage_mutations: 6/6\nstorage_multiple_tables: 6/6\nvector_ties_and_filter: 5/5\nvector_float32: 3/3\nvector_index_maintenance: 9/9\ntransaction_failed_insert: 8/8\ntransaction_autocommit_atomic: 4/4\ntransaction_shutdown_rollback: 5/5\nPUBLIC V4: 20/20 cases, 95/95 SQL\n",
+    "ctest_output": "Internal ctest changing into directory: /work/build\nTest project /work/build\n      Start  1: integration\n      Start  2: fault_injection\n 1/15 Test  #2: fault_injection ..................   Passed    0.13 sec\n      Start  3: randomized_differential\n 2/15 Test  #1: integration ......................   Passed    0.14 sec\n      Start  4: disk_btree_stress\n 3/15 Test  #4: disk_btree_stress ................   Passed    0.56 sec\n      Start  5: bounded_memory\n 4/15 Test  #3: randomized_differential ..........   Passed    1.35 sec\n      Start  6: wal_rotation\n 5/15 Test  #6: wal_rotation .....................   Passed    0.55 sec\n      Start  7: ann_transactional\n 6/15 Test  #7: ann_transactional ................   Passed    0.42 sec\n      Start  8: compaction_and_crash\n 7/15 Test  #8: compaction_and_crash .............   Passed    1.82 sec\n      Start  9: vector_scan_cache\n 8/15 Test  #9: vector_scan_cache ................   Passed    0.65 sec\n      Start 10: deep_btree\n 9/15 Test  #5: bounded_memory ...................   Passed   10.35 sec\n      Start 11: pk_btree_range\n10/15 Test #11: pk_btree_range ...................   Passed    1.48 sec\n      Start 12: mapped_vector_forced\n11/15 Test #12: mapped_vector_forced .............   Passed    0.87 sec\n      Start 13: mapped_vector_large\n12/15 Test #10: deep_btree .......................   Passed   15.16 sec\n      Start 14: official_public_basic_cases\n13/15 Test #14: official_public_basic_cases ......   Passed    0.15 sec\n      Start 15: simd_exact_differential\n14/15 Test #15: simd_exact_differential ..........   Passed    0.43 sec\n15/15 Test #13: mapped_vector_large ..............   Passed   13.21 sec\n\n100% tests passed, 0 tests failed out of 15\n\nTotal Test time (real) =  26.62 sec\n",
+    "benchmark": {
+      "classification": "local_docker_cgroup_v2_preliminary_NOT_official_scoring",
+      "image": "mvdb:runtime-20261109-201056",
+      "local_limits_not_organizer_verified": {
+        "cpus": 2.0,
+        "memory": "2g",
+        "pids": 256
+      },
+      "notes": [
+        "Public SQL cases are validated via a separate developer adapter, not the private official driver.",
+        "Container cgroup-v2 memory.peak includes page cache and process memory (unlike host process RSS).",
+        "Cgroup io.stat may depend on storage driver, filesystem, block-device accounting and writeback.",
+        "Index preparation time excluded from query_seconds; its IO and memory included in total.",
+        "NumPy truth checking runs on host after timing and does not contribute to DB container resources.",
+        "Results are not an official score: official baseline and hidden workloads are unavailable."
+      ],
+      "rounds": [
+        {
+          "round": 1,
+          "rows": 10000,
+          "dimension": 128,
+          "docker_data_volume": "mvdb-eval-2d525de8c284-data",
+          "seed": 20261109,
+          "raw_cgroup_snapshots": [
+            {
+              "memory_peak_bytes": 6594560,
+              "io_read_bytes": 0,
+              "io_write_bytes": 8192
+            },
+            {
+              "memory_peak_bytes": 22495232,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36048896,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36200448,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            }
+          ],
+          "queries": 1000,
+          "filtered_queries": 500,
+          "k": 10,
+          "search_mode": "exact",
+          "created_vector_index": false,
+          "write_seconds": 2.391,
+          "query_prepare_seconds": 0.141,
+          "query_seconds": 0.812,
+          "query_qps": 1231.53,
+          "io_write_phase": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "io_index_and_warmup": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_query_phase": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_total_after_create": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "cgroup_v2_memory_peak_bytes": 36200448,
+          "sampled_recall_at_10_unfiltered": 1.0,
+          "sampled_recall_at_10_filtered": 1.0,
+          "sampled_recall_queries": 1000,
+          "errors": null
+        },
+        {
+          "round": 2,
+          "rows": 10000,
+          "dimension": 128,
+          "docker_data_volume": "mvdb-eval-125e3d9e96db-data",
+          "seed": 20261109,
+          "raw_cgroup_snapshots": [
+            {
+              "memory_peak_bytes": 6361088,
+              "io_read_bytes": 0,
+              "io_write_bytes": 8192
+            },
+            {
+              "memory_peak_bytes": 22065152,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 35569664,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36270080,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            }
+          ],
+          "queries": 1000,
+          "filtered_queries": 500,
+          "k": 10,
+          "search_mode": "exact",
+          "created_vector_index": false,
+          "write_seconds": 2.437,
+          "query_prepare_seconds": 0.157,
+          "query_seconds": 0.859,
+          "query_qps": 1164.14,
+          "io_write_phase": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "io_index_and_warmup": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_query_phase": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_total_after_create": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "cgroup_v2_memory_peak_bytes": 36270080,
+          "sampled_recall_at_10_unfiltered": 1.0,
+          "sampled_recall_at_10_filtered": 1.0,
+          "sampled_recall_queries": 1000,
+          "errors": null
+        },
+        {
+          "round": 3,
+          "rows": 10000,
+          "dimension": 128,
+          "docker_data_volume": "mvdb-eval-973a466e4701-data",
+          "seed": 20261109,
+          "raw_cgroup_snapshots": [
+            {
+              "memory_peak_bytes": 7147520,
+              "io_read_bytes": 0,
+              "io_write_bytes": 8192
+            },
+            {
+              "memory_peak_bytes": 22446080,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 35938304,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36241408,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            }
+          ],
+          "queries": 1000,
+          "filtered_queries": 500,
+          "k": 10,
+          "search_mode": "exact",
+          "created_vector_index": false,
+          "write_seconds": 2.593,
+          "query_prepare_seconds": 0.156,
+          "query_seconds": 0.86,
+          "query_qps": 1162.79,
+          "io_write_phase": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "io_index_and_warmup": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_query_phase": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_total_after_create": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "cgroup_v2_memory_peak_bytes": 36241408,
+          "sampled_recall_at_10_unfiltered": 1.0,
+          "sampled_recall_at_10_filtered": 1.0,
+          "sampled_recall_queries": 1000,
+          "errors": null
+        }
+      ],
+      "median": {
+        "write_seconds": 2.437,
+        "query_seconds": 0.859,
+        "query_qps": 1164.14,
+        "cgroup_memory_peak_bytes": 36241408,
+        "cgroup_io_total_bytes": 14290944
+      }
+    },
+    "transport_result": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "create_table_response_before_stdin_EOF",
+          "passed": true
+        },
+        {
+          "name": "multirow_insert",
+          "passed": true
+        },
+        {
+          "name": "UTF8_BIGINT_empty_string_tab_backslash_roundtrip",
+          "passed": true
+        },
+        {
+          "name": "expected_error_is_a_nonempty_stdout_frame",
+          "passed": true
+        },
+        {
+          "name": "query_continues_after_error",
+          "passed": true
+        },
+        {
+          "name": "begin",
+          "passed": true
+        },
+        {
+          "name": "update_in_transaction",
+          "passed": true
+        },
+        {
+          "name": "read_own_write",
+          "passed": true
+        },
+        {
+          "name": "rollback",
+          "passed": true
+        },
+        {
+          "name": "rollback_restores_row",
+          "passed": true
+        },
+        {
+          "name": "second_begin",
+          "passed": true
+        },
+        {
+          "name": "committed_update",
+          "passed": true
+        },
+        {
+          "name": "commit",
+          "passed": true
+        },
+        {
+          "name": "begin_before_normal_exit",
+          "passed": true
+        },
+        {
+          "name": "uncommitted_delete_before_normal_exit",
+          "passed": true
+        },
+        {
+          "name": "normal_exit_rollback_and_commit_persistence",
+          "passed": true
+        },
+        {
+          "name": "begin_before_EOF",
+          "passed": true
+        },
+        {
+          "name": "uncommitted_delete_before_EOF",
+          "passed": true
+        },
+        {
+          "name": "EOF_shutdown_rolls_back",
+          "passed": true
+        },
+        {
+          "name": "create_vector_index_in_ann_startup_mode",
+          "passed": true
+        },
+        {
+          "name": "vector_TopK_frame_and_rows",
+          "passed": true
+        }
+      ],
+      "official_protocol_compatibility_verified": false
+    },
+    "agent_reflection": "API-adapter correctness is distinct from production wire compatibility. The official public branch does not provide enough protocol material to claim formal admission."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "kind": "local_preliminary_not_official",
+  "n": 1000,
+  "dimension": 128,
+  "batch_size": 100,
+  "queries": 100,
+  "k": 10,
+  "filtered_queries": 50,
+  "write_seconds": 0.116108,
+  "query_seconds": 0.0254,
+  "query_qps": 3937.05,
+  "write_committed_rows_per_sec": 8612.67,
+  "observed_process_io_bytes_total": 593920,
+  "observed_process_io_bytes_write_phase": 593920,
+  "sampled_process_rss_peak_bytes": 3571712,
+  "wal_size_bytes": 548449,
+  "sampled_recall_at_10_no_filter": 1.0,
+  "sampled_recall_at_10_filter": 1.0,
+  "recall_queries_checked": 40,
+  "notes": "/proc process I/O and RSS are not cgroup v2 io.stat or memory.peak. This process caches all rows and lacks disk B+tree/ANN."
+}

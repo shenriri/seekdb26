@@ -1,0 +1,29 @@
+{
+  "classification": "local_validation_not_official_admission_or_score",
+  "official_test_commit": "9f6df2ba5acf871376e22b64a3d0724e4b575044",
+  "public_cases": "20/20",
+  "public_sql": "95/95",
+  "ctest": "15/15",
+  "production_smoke_and_restart": "passed",
+  "transport_checks": "21/21",
+  "benchmark": {
+    "rounds": 3,
+    "mode": "exact",
+    "rows": 10000,
+    "dimension": 128,
+    "queries_per_round": 1000,
+    "recall_queries_verified_per_round": 1000,
+    "cpus": 2,
+    "memory": "2GiB",
+    "pids": 256,
+    "swap": false,
+    "data_storage": "independent Docker Linux volumes"
+  },
+  "official_protocol_compatibility": "not_verified; current public branch has no complete stdin/stdout driver",
+  "known_limits": [
+    "in-memory transaction write set",
+    "64MiB serialized transaction limit",
+    "over-cgroup-memory data test not completed",
+    "formal dependency freeze pending"
+  ]
+}

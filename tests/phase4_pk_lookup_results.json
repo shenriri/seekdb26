@@ -1,0 +1,22 @@
+{
+  "kind": "local_nonofficial_point_lookup_benchmark",
+  "records": 10000,
+  "point_queries": 500,
+  "samples_seconds": {
+    "phase3": [
+      0.164208,
+      0.154099,
+      0.160019
+    ],
+    "phase4": [
+      0.018517,
+      0.018128,
+      0.018599
+    ]
+  },
+  "median_seconds": {
+    "phase3": 0.160019,
+    "phase4": 0.018517
+  },
+  "speedup_phase4_vs_phase3": 8.64
+}

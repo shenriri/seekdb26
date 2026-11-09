@@ -1,0 +1,43 @@
+{
+  "kind": "local_large_scan_ab_nonofficial",
+  "n": 25000,
+  "d": 128,
+  "varchar": true,
+  "filtered_only": true,
+  "posting_ab": true,
+  "queries": 80,
+  "write_seconds": 2.0188596459993278,
+  "samples": [
+    {
+      "mapped": true,
+      "postings": false,
+      "queries": 80,
+      "elapsed": 0.051348677000532916,
+      "rss_sample": 18063360
+    },
+    {
+      "mapped": true,
+      "postings": true,
+      "queries": 80,
+      "elapsed": 0.035521329999937734,
+      "rss_sample": 18083840
+    },
+    {
+      "mapped": true,
+      "postings": false,
+      "queries": 80,
+      "elapsed": 0.04122774100051174,
+      "rss_sample": 18063360
+    },
+    {
+      "mapped": true,
+      "postings": true,
+      "queries": 80,
+      "elapsed": 0.03438037900014024,
+      "rss_sample": 18046976
+    }
+  ],
+  "ratio_from_medians": 1.324379894645228,
+  "output_matching": true,
+  "heap_bytes": 13888611
+}

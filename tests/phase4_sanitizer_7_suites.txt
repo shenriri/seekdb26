@@ -1,0 +1,20 @@
+Internal ctest changing into directory: /tmp/mvdb-phase4-asan
+Test project /tmp/mvdb-phase4-asan
+    Start 1: integration
+    Start 2: fault_injection
+1/7 Test #1: integration ......................   Passed    1.06 sec
+    Start 3: randomized_differential
+2/7 Test #2: fault_injection ..................   Passed    1.06 sec
+    Start 4: disk_btree_stress
+3/7 Test #3: randomized_differential ..........   Passed    1.14 sec
+    Start 5: wal_rotation
+4/7 Test #4: disk_btree_stress ................   Passed    1.53 sec
+    Start 6: ann_transactional
+5/7 Test #5: wal_rotation .....................   Passed    1.13 sec
+    Start 7: compaction_and_crash
+6/7 Test #6: ann_transactional ................   Passed    1.82 sec
+7/7 Test #7: compaction_and_crash .............   Passed    2.69 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   6.02 sec

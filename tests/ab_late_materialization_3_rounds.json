@@ -1,0 +1,38 @@
+{
+  "method": "ABABAB alternating runs, same dataset seed 20261109, 10k vectors x 128, 1000 TopK, 500 filtered, k10; process RSS/I/O only",
+  "before": [
+    {
+      "write_seconds": 1.07808,
+      "query_seconds": 1.236894
+    },
+    {
+      "write_seconds": 1.141046,
+      "query_seconds": 1.294285
+    },
+    {
+      "write_seconds": 1.101574,
+      "query_seconds": 1.324779
+    }
+  ],
+  "late_materialization": [
+    {
+      "write_seconds": 1.119578,
+      "query_seconds": 1.078589
+    },
+    {
+      "write_seconds": 1.136477,
+      "query_seconds": 1.053667
+    },
+    {
+      "write_seconds": 1.087763,
+      "query_seconds": 1.11196
+    }
+  ],
+  "validation": "Every AB run used independent NumPy truth checking sampled 20 queries; returned success.",
+  "before_median_query_seconds": 1.294285,
+  "before_median_write_seconds": 1.101574,
+  "late_materialization_median_query_seconds": 1.078589,
+  "late_materialization_median_write_seconds": 1.119578,
+  "query_speedup": 1.2,
+  "qualifications": "Not a contest rank/score. Cgroup memory.peak and io.stat unavailable; small warmup and OS caching may vary."
+}

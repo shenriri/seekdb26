@@ -1,0 +1,51 @@
+{
+  "before": {
+    "write_seconds": [
+      1.513107,
+      1.500335,
+      1.563535
+    ],
+    "query_seconds": [
+      1.373066,
+      1.426812,
+      1.642187
+    ],
+    "median_query_seconds": 1.426812,
+    "median_write_seconds": 1.513107,
+    "recall_no_filter": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "recall_filter": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "after": {
+    "write_seconds": [
+      1.604364,
+      1.467726,
+      1.426404
+    ],
+    "query_seconds": [
+      1.485787,
+      1.460113,
+      1.601741
+    ],
+    "median_query_seconds": 1.485787,
+    "median_write_seconds": 1.467726,
+    "recall_no_filter": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "recall_filter": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "query_speedup": 0.9603072311172463
+}

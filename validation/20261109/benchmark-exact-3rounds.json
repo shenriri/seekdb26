@@ -1,0 +1,203 @@
+{
+  "classification": "local_docker_cgroup_v2_preliminary_NOT_official_scoring",
+  "image": "mvdb:runtime-20261109-201056",
+  "local_limits_not_organizer_verified": {
+    "cpus": 2.0,
+    "memory": "2g",
+    "pids": 256
+  },
+  "notes": [
+    "Public SQL cases are validated via a separate developer adapter, not the private official driver.",
+    "Container cgroup-v2 memory.peak includes page cache and process memory (unlike host process RSS).",
+    "Cgroup io.stat may depend on storage driver, filesystem, block-device accounting and writeback.",
+    "Index preparation time excluded from query_seconds; its IO and memory included in total.",
+    "NumPy truth checking runs on host after timing and does not contribute to DB container resources.",
+    "Results are not an official score: official baseline and hidden workloads are unavailable."
+  ],
+  "rounds": [
+    {
+      "round": 1,
+      "rows": 10000,
+      "dimension": 128,
+      "docker_data_volume": "mvdb-eval-2d525de8c284-data",
+      "seed": 20261109,
+      "raw_cgroup_snapshots": [
+        {
+          "memory_peak_bytes": 6594560,
+          "io_read_bytes": 0,
+          "io_write_bytes": 8192
+        },
+        {
+          "memory_peak_bytes": 22495232,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36048896,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36200448,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        }
+      ],
+      "queries": 1000,
+      "filtered_queries": 500,
+      "k": 10,
+      "search_mode": "exact",
+      "created_vector_index": false,
+      "write_seconds": 2.391,
+      "query_prepare_seconds": 0.141,
+      "query_seconds": 0.812,
+      "query_qps": 1231.53,
+      "io_write_phase": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "io_index_and_warmup": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_query_phase": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_total_after_create": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "cgroup_v2_memory_peak_bytes": 36200448,
+      "sampled_recall_at_10_unfiltered": 1.0,
+      "sampled_recall_at_10_filtered": 1.0,
+      "sampled_recall_queries": 1000,
+      "errors": null
+    },
+    {
+      "round": 2,
+      "rows": 10000,
+      "dimension": 128,
+      "docker_data_volume": "mvdb-eval-125e3d9e96db-data",
+      "seed": 20261109,
+      "raw_cgroup_snapshots": [
+        {
+          "memory_peak_bytes": 6361088,
+          "io_read_bytes": 0,
+          "io_write_bytes": 8192
+        },
+        {
+          "memory_peak_bytes": 22065152,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 35569664,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36270080,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        }
+      ],
+      "queries": 1000,
+      "filtered_queries": 500,
+      "k": 10,
+      "search_mode": "exact",
+      "created_vector_index": false,
+      "write_seconds": 2.437,
+      "query_prepare_seconds": 0.157,
+      "query_seconds": 0.859,
+      "query_qps": 1164.14,
+      "io_write_phase": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "io_index_and_warmup": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_query_phase": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_total_after_create": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "cgroup_v2_memory_peak_bytes": 36270080,
+      "sampled_recall_at_10_unfiltered": 1.0,
+      "sampled_recall_at_10_filtered": 1.0,
+      "sampled_recall_queries": 1000,
+      "errors": null
+    },
+    {
+      "round": 3,
+      "rows": 10000,
+      "dimension": 128,
+      "docker_data_volume": "mvdb-eval-973a466e4701-data",
+      "seed": 20261109,
+      "raw_cgroup_snapshots": [
+        {
+          "memory_peak_bytes": 7147520,
+          "io_read_bytes": 0,
+          "io_write_bytes": 8192
+        },
+        {
+          "memory_peak_bytes": 22446080,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 35938304,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36241408,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        }
+      ],
+      "queries": 1000,
+      "filtered_queries": 500,
+      "k": 10,
+      "search_mode": "exact",
+      "created_vector_index": false,
+      "write_seconds": 2.593,
+      "query_prepare_seconds": 0.156,
+      "query_seconds": 0.86,
+      "query_qps": 1162.79,
+      "io_write_phase": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "io_index_and_warmup": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_query_phase": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_total_after_create": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "cgroup_v2_memory_peak_bytes": 36241408,
+      "sampled_recall_at_10_unfiltered": 1.0,
+      "sampled_recall_at_10_filtered": 1.0,
+      "sampled_recall_queries": 1000,
+      "errors": null
+    }
+  ],
+  "median": {
+    "write_seconds": 2.437,
+    "query_seconds": 0.859,
+    "query_qps": 1164.14,
+    "cgroup_memory_peak_bytes": 36241408,
+    "cgroup_io_total_bytes": 14290944
+  }
+}

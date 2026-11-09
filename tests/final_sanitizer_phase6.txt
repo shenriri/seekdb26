@@ -1,0 +1,20 @@
+Internal ctest changing into directory: /mnt/data/MiniVectorDB_final_optimized/build_san
+Test project /mnt/data/MiniVectorDB_final_optimized/build_san
+    Start 11: pk_btree_range
+    Start 15: simd_exact_differential
+    Start  9: vector_scan_cache
+1/7 Test  #9: vector_scan_cache ................   Passed    1.32 sec
+    Start  2: fault_injection
+2/7 Test  #2: fault_injection ..................   Passed    0.99 sec
+    Start  1: integration
+3/7 Test #15: simd_exact_differential ..........   Passed    2.88 sec
+    Start 14: official_public_basic_cases
+4/7 Test  #1: integration ......................   Passed    0.98 sec
+    Start 12: mapped_vector_forced
+5/7 Test #14: official_public_basic_cases ......   Passed    1.09 sec
+6/7 Test #12: mapped_vector_forced .............   Passed    1.63 sec
+7/7 Test #11: pk_btree_range ...................   Passed    4.98 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   4.98 sec

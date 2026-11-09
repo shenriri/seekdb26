@@ -1,0 +1,24 @@
+Internal ctest changing into directory: /mnt/data/MiniVectorDB_phase4/build
+Test project /mnt/data/MiniVectorDB_phase4/build
+    Start 5: bounded_memory
+    Start 9: deep_btree
+    Start 8: compaction_and_crash
+    Start 3: randomized_differential
+1/9 Test #3: randomized_differential ..........   Passed    1.40 sec
+    Start 4: disk_btree_stress
+2/9 Test #8: compaction_and_crash .............   Passed    1.60 sec
+    Start 7: ann_transactional
+3/9 Test #4: disk_btree_stress ................   Passed    1.35 sec
+    Start 6: wal_rotation
+4/9 Test #7: ann_transactional ................   Passed    1.19 sec
+    Start 1: integration
+5/9 Test #1: integration ......................   Passed    1.03 sec
+    Start 2: fault_injection
+6/9 Test #6: wal_rotation .....................   Passed    1.14 sec
+7/9 Test #2: fault_injection ..................   Passed    1.00 sec
+8/9 Test #9: deep_btree .......................   Passed    6.24 sec
+9/9 Test #5: bounded_memory ...................   Passed    8.23 sec
+
+100% tests passed, 0 tests failed out of 9
+
+Total Test time (real) =   8.23 sec

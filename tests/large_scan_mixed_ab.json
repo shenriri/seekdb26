@@ -1,0 +1,38 @@
+{
+  "kind": "local_large_scan_ab_nonofficial",
+  "n": 25000,
+  "d": 128,
+  "varchar": true,
+  "filtered_only": false,
+  "queries": 20,
+  "write_seconds": 2.103414133000115,
+  "samples": [
+    {
+      "mapped": false,
+      "queries": 20,
+      "elapsed": 6.7338681810006165,
+      "rss_sample": 13508608
+    },
+    {
+      "mapped": true,
+      "queries": 20,
+      "elapsed": 0.12208867899971665,
+      "rss_sample": 18079744
+    },
+    {
+      "mapped": false,
+      "queries": 20,
+      "elapsed": 6.745428092000111,
+      "rss_sample": 13529088
+    },
+    {
+      "mapped": true,
+      "queries": 20,
+      "elapsed": 0.13011923600060982,
+      "rss_sample": 18079744
+    }
+  ],
+  "ratio_from_medians": 53.44517547351073,
+  "output_matching": true,
+  "heap_bytes": 13888611
+}

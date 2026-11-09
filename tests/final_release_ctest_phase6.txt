@@ -1,0 +1,36 @@
+Internal ctest changing into directory: /mnt/data/MiniVectorDB_final_optimized/build
+Test project /mnt/data/MiniVectorDB_final_optimized/build
+      Start 13: mapped_vector_large
+      Start  5: bounded_memory
+      Start 10: deep_btree
+      Start  8: compaction_and_crash
+ 1/15 Test  #8: compaction_and_crash .............   Passed    1.43 sec
+      Start  3: randomized_differential
+ 2/15 Test  #3: randomized_differential ..........   Passed    1.26 sec
+      Start 11: pk_btree_range
+ 3/15 Test #11: pk_btree_range ...................   Passed    1.23 sec
+      Start  4: disk_btree_stress
+ 4/15 Test  #4: disk_btree_stress ................   Passed    1.02 sec
+      Start  7: ann_transactional
+ 5/15 Test #10: deep_btree .......................   Passed    5.29 sec
+      Start  6: wal_rotation
+ 6/15 Test  #5: bounded_memory ...................   Passed    5.77 sec
+      Start  9: vector_scan_cache
+ 7/15 Test  #7: ann_transactional ................   Passed    0.99 sec
+      Start 15: simd_exact_differential
+ 8/15 Test  #6: wal_rotation .....................   Passed    1.00 sec
+      Start 14: official_public_basic_cases
+ 9/15 Test  #9: vector_scan_cache ................   Passed    0.92 sec
+      Start  2: fault_injection
+10/15 Test #14: official_public_basic_cases ......   Passed    0.92 sec
+      Start  1: integration
+11/15 Test #15: simd_exact_differential ..........   Passed    1.34 sec
+      Start 12: mapped_vector_forced
+12/15 Test  #2: fault_injection ..................   Passed    1.00 sec
+13/15 Test  #1: integration ......................   Passed    0.81 sec
+14/15 Test #12: mapped_vector_forced .............   Passed    0.77 sec
+15/15 Test #13: mapped_vector_large ..............   Passed   14.81 sec
+
+100% tests passed, 0 tests failed out of 15
+
+Total Test time (real) =  14.81 sec

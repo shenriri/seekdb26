@@ -1,0 +1,18 @@
+# DEVELOPMENT/VERIFICATION IMAGE, NOT THE GRADING RUNTIME IMAGE.
+# Rebuild from C++ sources in the image. Keep the production Dockerfile separate.
+FROM ubuntu:24.04 AS verify
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      g++ cmake make ca-certificates python3 python3-numpy python3-psutil \
+ && rm -rf /var/lib/apt/lists/*
+WORKDIR /work
+COPY CMakeLists.txt /work/
+COPY include /work/include
+COPY src /work/src
+COPY tools /work/tools
+COPY tests /work/tests
+COPY official_mysqltest /work/official_mysqltest
+RUN cmake -S /work -B /work/build -DCMAKE_BUILD_TYPE=Release \
+ && cmake --build /work/build -j2
+CMD ["ctest", "--test-dir", "/work/build", "--output-on-failure", "-j2"]

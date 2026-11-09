@@ -1,0 +1,12 @@
+.git
+build/
+build_*/
+__pycache__/
+*.pyc
+*.o
+*.a
+*.so
+*.log
+reports/
+*.zip
+.DS_Store

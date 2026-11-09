@@ -1,0 +1,41 @@
+{
+  "source_commit": "a3dba559c1e7ebdc48bc990ffb1a4c75d1c1075c",
+  "source_scope": "public-samples",
+  "version": "minivectordb-public-basic-v1",
+  "cases": [
+    {
+      "name": "sql_crud",
+      "statements": 9,
+      "passed": 9,
+      "failures": []
+    },
+    {
+      "name": "sql_comparisons",
+      "statements": 7,
+      "passed": 7,
+      "failures": []
+    },
+    {
+      "name": "sql_ordering",
+      "statements": 7,
+      "passed": 7,
+      "failures": []
+    },
+    {
+      "name": "sql_empty",
+      "statements": 4,
+      "passed": 4,
+      "failures": []
+    },
+    {
+      "name": "vector_euclidean",
+      "statements": 5,
+      "passed": 5,
+      "failures": []
+    }
+  ],
+  "total_sql": 32,
+  "passed_sql": 32,
+  "passed_cases": 5,
+  "total_cases": 5
+}

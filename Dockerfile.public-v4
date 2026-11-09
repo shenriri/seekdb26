@@ -1,0 +1,7 @@
+ARG VERIFY_IMAGE=mvdb:verify
+FROM ${VERIFY_IMAGE}
+COPY tools/build_v4_adapter.py /local-harness/build_v4_adapter.py
+COPY tools/run_public_v4.py /local-harness/run_public_v4.py
+COPY mysqltest /official-v4
+RUN python3 /local-harness/build_v4_adapter.py
+CMD ["python3", "/local-harness/run_public_v4.py", "/v4src/public_v4_adapter", "/official-v4", "/tmp/public-v4.json"]

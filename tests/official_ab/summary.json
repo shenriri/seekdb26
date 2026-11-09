@@ -1,0 +1,19 @@
+{
+  "off": {
+    "write_seconds": 1.29904,
+    "query_seconds": 0.999014,
+    "observed_process_io_bytes_total": 14295040,
+    "sampled_process_rss_peak_bytes": 17854464,
+    "sampled_recall_at_10_no_filter": 1.0,
+    "sampled_recall_at_10_filter": 1.0
+  },
+  "on": {
+    "write_seconds": 1.320281,
+    "query_seconds": 0.466792,
+    "observed_process_io_bytes_total": 14290944,
+    "sampled_process_rss_peak_bytes": 17854464,
+    "sampled_recall_at_10_no_filter": 1.0,
+    "sampled_recall_at_10_filter": 1.0
+  },
+  "speedup": 2.1401694973350014
+}

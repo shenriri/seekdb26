@@ -1,0 +1,75 @@
+{
+  "off": {
+    "runs": [
+      {
+        "write_seconds": 1.34625,
+        "query_seconds": 0.910799,
+        "observed_process_io_bytes_total": 14290944,
+        "sampled_process_rss_peak_bytes": 17854464,
+        "sampled_recall_at_10_no_filter": 1.0,
+        "sampled_recall_at_10_filter": 1.0
+      },
+      {
+        "write_seconds": 1.443733,
+        "query_seconds": 0.959263,
+        "observed_process_io_bytes_total": 14290944,
+        "sampled_process_rss_peak_bytes": 17858560,
+        "sampled_recall_at_10_no_filter": 1.0,
+        "sampled_recall_at_10_filter": 1.0
+      },
+      {
+        "write_seconds": 1.400719,
+        "query_seconds": 0.945611,
+        "observed_process_io_bytes_total": 14290944,
+        "sampled_process_rss_peak_bytes": 17862656,
+        "sampled_recall_at_10_no_filter": 1.0,
+        "sampled_recall_at_10_filter": 1.0
+      }
+    ],
+    "median": {
+      "write_seconds": 1.400719,
+      "query_seconds": 0.945611,
+      "observed_process_io_bytes_total": 14290944,
+      "sampled_process_rss_peak_bytes": 17858560,
+      "sampled_recall_at_10_no_filter": 1.0,
+      "sampled_recall_at_10_filter": 1.0
+    }
+  },
+  "on": {
+    "runs": [
+      {
+        "write_seconds": 1.348421,
+        "query_seconds": 0.437225,
+        "observed_process_io_bytes_total": 14290944,
+        "sampled_process_rss_peak_bytes": 17870848,
+        "sampled_recall_at_10_no_filter": 1.0,
+        "sampled_recall_at_10_filter": 1.0
+      },
+      {
+        "write_seconds": 1.361392,
+        "query_seconds": 0.442323,
+        "observed_process_io_bytes_total": 14290944,
+        "sampled_process_rss_peak_bytes": 17870848,
+        "sampled_recall_at_10_no_filter": 1.0,
+        "sampled_recall_at_10_filter": 1.0
+      },
+      {
+        "write_seconds": 1.366852,
+        "query_seconds": 0.448727,
+        "observed_process_io_bytes_total": 14290944,
+        "sampled_process_rss_peak_bytes": 17854464,
+        "sampled_recall_at_10_no_filter": 1.0,
+        "sampled_recall_at_10_filter": 1.0
+      }
+    ],
+    "median": {
+      "write_seconds": 1.361392,
+      "query_seconds": 0.442323,
+      "observed_process_io_bytes_total": 14290944,
+      "sampled_process_rss_peak_bytes": 17870848,
+      "sampled_recall_at_10_no_filter": 1.0,
+      "sampled_recall_at_10_filter": 1.0
+    }
+  },
+  "query_speedup": 2.1378291429566176
+}

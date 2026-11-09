@@ -1,0 +1,43 @@
+{
+  "kind": "local_pk_ordered_topk_perf_nonofficial",
+  "n": 20000,
+  "queries": 300,
+  "results": [
+    {
+      "round": 1,
+      "fast": false,
+      "seconds": 2.716478198999539
+    },
+    {
+      "round": 1,
+      "fast": true,
+      "seconds": 0.023294943000109924
+    },
+    {
+      "round": 2,
+      "fast": true,
+      "seconds": 0.025351094999678025
+    },
+    {
+      "round": 2,
+      "fast": false,
+      "seconds": 2.692504267000004
+    },
+    {
+      "round": 3,
+      "fast": false,
+      "seconds": 3.038539273999959
+    },
+    {
+      "round": 3,
+      "fast": true,
+      "seconds": 0.017423603000679577
+    }
+  ],
+  "medians_seconds": {
+    "False": 2.716478198999539,
+    "True": 0.023294943000109924
+  },
+  "speedup": 116.61235655252389,
+  "identical_results": true
+}
