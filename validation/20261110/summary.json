@@ -1,0 +1,55 @@
+{
+  "upstream_protocol_commit": "f4d4e26653af823a7601668802f80e374ad6643c",
+  "official_published_protocol_check": {
+    "handshake": true,
+    "public_cases": "20/20",
+    "sql": "95/95"
+  },
+  "regression": "16/16",
+  "hard_memory_stress": {
+    "passed": true,
+    "rows": 200000,
+    "dimension": 128,
+    "heap_bytes": 109400000,
+    "memory_max_bytes": 67108864,
+    "cgroup_memory_peak_bytes": 67108864,
+    "cgroup_snapshot": "109400000\n67108864\n67108864\nlow 0\nhigh 0\nmax 1918\noom 0\noom_kill 0\noom_group_kill 0\n",
+    "restart_checks": true,
+    "volume": "mvdb-external-f6c2890d3334-data",
+    "note": "Local reduced-memory stress; not all hidden acceptance cases."
+  },
+  "performance": {
+    "baseline_median": {
+      "write_seconds": 2.859,
+      "query_seconds": 0.922,
+      "query_qps": 1084.6,
+      "cgroup_v2_memory_peak_bytes": 36261888
+    },
+    "optimized_median": {
+      "write_seconds": 2.469,
+      "query_seconds": 0.828,
+      "query_qps": 1207.73,
+      "cgroup_v2_memory_peak_bytes": 36122624
+    },
+    "write_speedup": 1.1579586877278252,
+    "query_speedup": 1.1135265700483092,
+    "order": [
+      "baseline-1",
+      "optimized-1",
+      "optimized-2",
+      "baseline-2",
+      "baseline-3",
+      "optimized-3"
+    ]
+  },
+  "runtime_image": "mvdb:json-final-20261110",
+  "runtime_binary_sha256": "fc71db5592113dfa26633d7a779d14e7f2c8f78c7c942e58a9f6f3ef5d4ac6e9",
+  "optimized_and_final_binary_identical": true,
+  "formal_hidden_admission_or_score": false,
+  "limitations": [
+    "64MiB serialized transaction cap; pending writes remain in memory",
+    "unbounded SQL result materialization; 16MiB official response limit must be considered",
+    "not all 29 formal acceptance cases have been executed",
+    "reported AB gain has visible single-round noise; no claim of global optimum"
+  ]
+}

@@ -1,79 +1,74 @@
-# MiniVectorDB — Phase6 submission candidate
+# MiniVectorDB — official JSONL implementation
 
-C++17 single-process, single-client SQL/vector database. Self-authored SQL execution,
-disk copy-on-write B+Tree, bounded caches, WAL/recovery, transactions and IVF-Flat.
-Persistent database files are stored under `/data`. No network listener is used.
+C++17, single process/client, self-authored SQL executor, disk COW B+Tree, bounded
+caches, WAL/recovery, transactions and IVF-Flat. Database files stay under /data.
+This version incorporates the published protocol at official commit f4d4e26653af823a7601668802f80e374ad6643c.
 
 ## Build and run
 
 ```bash
 docker build -t mvdb:runtime .
 docker run --rm -i --network none --cpus 2 --memory 2g --memory-swap 2g \
-  --mount type=volume,src=mvdb-data,dst=/data mvdb:runtime
+  --pids-limit 128 --mount type=volume,src=mvdb-data,dst=/data mvdb:runtime
 ```
 
-The resource limits above are local examples, not organizer-frozen limits.
-The Dockerfile is the runtime recipe successfully exercised on Windows Docker
-Desktop Linux amd64; it uses a signed Ubuntu mirror and includes C++ runtime libraries.
-Image digests and full dependency versions still require the organizer's freeze.
+Default input/output is the JSONL protocol in [STDIO_PROTOCOL.md](STDIO_PROTOCOL.md).
+After recovery the program proactively emits `{"type":"ready"}` and flushes.
+It accepts execute requests with id/sql/search_mode, and shutdown requests;
+id types, typed rows, columns, affected_rows and structured errors are returned.
+Logs go to stderr. No network listener or TTY is required.
 
-Current developer protocol: one SQL statement per UTF-8 line, flushed responses
-`OK`, `ERR\t<engine error>`, or `ROWS\tN`, N `ROW` lines, then `END`.
-Fields escape backslash/tab/CR/LF. `.exit`, `\q`, or stdin EOF close normally and
-discard uncommitted transactions. Select exact/ann at startup with
-`--search-mode exact|ann`; exact is the default. This protocol has NOT been
-certified against an organizer stdin/stdout driver. Production output currently
-does not expose columns or affected_rows; those are verified through a development API adapter.
-
-```sql
-CREATE TABLE docs (id BIGINT PRIMARY KEY, text VARCHAR(128), emb VECTOR(2));
-INSERT INTO docs VALUES (1,'hello','[3,4]');
-SELECT id,text FROM docs ORDER BY id;
-SELECT id,L2_DISTANCE(emb,'[0,0]') AS distance FROM docs ORDER BY distance LIMIT 10;
-BEGIN;
-UPDATE docs SET text='committed' WHERE id=1;
-COMMIT;
-BEGIN;
-DELETE FROM docs WHERE id=1;
-ROLLBACK;
+```json
+{"id":1,"op":"execute","sql":"CREATE TABLE docs (id BIGINT PRIMARY KEY, content VARCHAR(16));","search_mode":"exact"}
+{"id":2,"op":"execute","sql":"INSERT INTO docs VALUES (1,'你好');","search_mode":"exact"}
+{"id":3,"op":"execute","sql":"SELECT id,content FROM docs;","search_mode":"exact"}
+{"id":4,"op":"shutdown"}
 ```
 
-Send `.exit`, then rerun the container with the same mvdb-data volume to verify persistence.
-SQL/type rules and implementation history are in `docs/`.
+Send one physical JSON line, wait for one response. Reuse the same volume after
+shutdown to check persistence. Per-request exact/ann switches retain transaction
+state. Default exact is also the measured performance mode.
 
-## Actual local validation, 2026-11-09
+## Official published checks (Linux / WSL with Docker CLI)
 
-- Current official public-v4: 20/20 groups, 95/95 SQL via development API adapter.
-- Docker Release CTest: 15/15; production smoke/restart and 21 transport checks passed.
-- Three exact rounds: 10K x 128 vectors, 1000 queries each, half filtered; all
-  queries independently checked, Recall@10=1 for both groups in every round.
-- Median: write 2.437s, query 0.859s, 1164.14 QPS; container peak median 36,241,408 bytes.
-- These are local results, NOT formal admission, an official score, or an ANN performance result.
+```bash
+python3 protocol_check/run.py --image mvdb:runtime --handshake-only --output protocol-results/handshake-1
+python3 protocol_check/run.py --image mvdb:runtime --output protocol-results/public-1
+```
 
-Raw relevant results: `validation/20261109/`. Older observations under tests/docs
-are historical and may describe earlier development environments.
+Each output directory must be new. The official checker is retained unchanged;
+it uses POSIX pipe selectors, so Windows users should run it under Linux/WSL.
+Read protocol_check/README.md for configuration and interpretation.
 
-## Reproduce correctness checks
+## Results recorded 2026-11-10
+
+- Actual production image: published handshake PASS, 20/20 public groups / 95/95 SQL PASS.
+- CTest: 16/16, including JSON types, modes within a transaction, recovery and failure paths.
+- 200K x 128D / 109,400,000-byte Heap under hard 64MiB cgroup: passed, no OOM, restart checked.
+- Three interleaved JSONL A/B rounds: median write 2.859s -> 2.469s,
+  query 0.922s -> 0.828s, both Recall@10 groups 1.0 in every round.
+  Every query and all rows after restart checked. Single-round variance is visible.
+- This is public compatibility and local performance evidence, NOT all 29 formal cases or an official score.
+
+See [design, revised approach and measurements](docs/JSONL_DESIGN_AND_VALIDATION.md)
+and validation/20261110/. Base digests, direct package versions and vendored JSON
+library checksum are in DEPENDENCIES.lock.json. MIT serialization-library license
+is retained at include/nlohmann/LICENSE.MIT; no external database/vector engine is used.
+
+## Additional regression and performance checks
 
 ```bash
 docker build -f Dockerfile.eval -t mvdb:verify .
-docker run --rm --network none --cpus 2 --memory 2g --memory-swap 2g mvdb:verify
-docker build -f Dockerfile.public-v4 -t mvdb:public-v4 .
-docker run --rm --network none --cpus 2 --memory 2g --memory-swap 2g mvdb:public-v4
+docker run --rm --network none --cpus 2 --memory 2g --memory-swap 2g --pids-limit 128 mvdb:verify
+python3 tests/docker_benchmark_json.py --image mvdb:runtime --rounds 3 --verify 1000 --output benchmark.json
 ```
 
-`mysqltest/` is the upstream v4 suite; `official_mysqltest/` retains the older
-five-case suite used by the original CTest. The v4 adapter overlay adds only an
-in-process ANN-mode setter, without changing core algorithms or production code.
+The older text interface remains available only via explicit --protocol legacy
+or the test binary minivectordb_legacy. Historical text benchmarks must target
+that binary; production evaluation uses default JSONL. Old API adapters and
+20261109 reports are historical development checks.
 
-## Submission and outstanding checks
-
-Target branch: `2026-competition-round2`; learning material: `agent/conversation.json`.
-Core source, runtime Dockerfile and learning material belong to the same commit.
-The empty upstream root conversation.json placeholder is removed to retain one material file.
-
-Formal wire-format validation awaits the organizer protocol/driver. Large
-transactions remain in memory and serialized commits are capped at 64MiB;
-datasets exceeding the cgroup memory budget need further validation. Actual
-low-probe IVF recall is not certified; exact is the measured performance mode.
-No platform formal assessment has been requested by this repository upload.
+Target branch: 2026-competition-round2; learning evidence: agent/conversation.json.
+Known limits: in-memory pending write set and 64MiB serialized transaction cap;
+unbounded result materialization and all hidden admission cases still need review.
+No formal platform evaluation was initiated by this upload.

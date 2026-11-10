@@ -1,0 +1,407 @@
+{
+  "classification": "local_JSONL_AB_not_official_scoring",
+  "order": [
+    "baseline-1",
+    "optimized-1",
+    "optimized-2",
+    "baseline-2",
+    "baseline-3",
+    "optimized-3"
+  ],
+  "baseline": [
+    {
+      "round": 1,
+      "rows": 10000,
+      "dimension": 128,
+      "data_volume": "mvdb-json-609558bbc184-data",
+      "seed": 20261109,
+      "cgroup_snapshots": [
+        {
+          "memory_peak_bytes": 6582272,
+          "io_read_bytes": 0,
+          "io_write_bytes": 8192
+        },
+        {
+          "memory_peak_bytes": 24629248,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36057088,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36261888,
+          "io_read_bytes": 36864,
+          "io_write_bytes": 14299136
+        }
+      ],
+      "queries": 1000,
+      "filtered_queries": 500,
+      "k": 10,
+      "search_mode": "exact",
+      "created_vector_index": false,
+      "write_seconds": 2.484,
+      "query_prepare_seconds": 0.141,
+      "query_seconds": 0.829,
+      "query_qps": 1206.27,
+      "io_write_phase": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "io_index_and_warmup": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_query_phase": {
+        "read_bytes": 36864,
+        "write_bytes": 0
+      },
+      "io_total_after_create": {
+        "read_bytes": 36864,
+        "write_bytes": 14290944
+      },
+      "cgroup_v2_memory_peak_bytes": 36261888,
+      "sampled_recall_at_10_unfiltered": 1.0,
+      "sampled_recall_at_10_filtered": 1.0,
+      "sampled_recall_queries": 1000,
+      "errors": null,
+      "io_whole_run": {
+        "read_bytes": 36864,
+        "write_bytes": 14299136
+      }
+    },
+    {
+      "round": 2,
+      "rows": 10000,
+      "dimension": 128,
+      "data_volume": "mvdb-json-dad9d6f936cc-data",
+      "seed": 20261109,
+      "cgroup_snapshots": [
+        {
+          "memory_peak_bytes": 6967296,
+          "io_read_bytes": 0,
+          "io_write_bytes": 8192
+        },
+        {
+          "memory_peak_bytes": 24760320,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36179968,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 39165952,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        }
+      ],
+      "queries": 1000,
+      "filtered_queries": 500,
+      "k": 10,
+      "search_mode": "exact",
+      "created_vector_index": false,
+      "write_seconds": 2.859,
+      "query_prepare_seconds": 0.157,
+      "query_seconds": 0.922,
+      "query_qps": 1084.6,
+      "io_write_phase": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "io_index_and_warmup": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_query_phase": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_total_after_create": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "cgroup_v2_memory_peak_bytes": 39165952,
+      "sampled_recall_at_10_unfiltered": 1.0,
+      "sampled_recall_at_10_filtered": 1.0,
+      "sampled_recall_queries": 1000,
+      "errors": null,
+      "io_whole_run": {
+        "read_bytes": 0,
+        "write_bytes": 14299136
+      }
+    },
+    {
+      "round": 3,
+      "rows": 10000,
+      "dimension": 128,
+      "data_volume": "mvdb-json-3017a38f3562-data",
+      "seed": 20261109,
+      "cgroup_snapshots": [
+        {
+          "memory_peak_bytes": 6868992,
+          "io_read_bytes": 0,
+          "io_write_bytes": 8192
+        },
+        {
+          "memory_peak_bytes": 24412160,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 35639296,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36048896,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        }
+      ],
+      "queries": 1000,
+      "filtered_queries": 500,
+      "k": 10,
+      "search_mode": "exact",
+      "created_vector_index": false,
+      "write_seconds": 2.891,
+      "query_prepare_seconds": 0.156,
+      "query_seconds": 0.922,
+      "query_qps": 1084.6,
+      "io_write_phase": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "io_index_and_warmup": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_query_phase": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_total_after_create": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "cgroup_v2_memory_peak_bytes": 36048896,
+      "sampled_recall_at_10_unfiltered": 1.0,
+      "sampled_recall_at_10_filtered": 1.0,
+      "sampled_recall_queries": 1000,
+      "errors": null,
+      "io_whole_run": {
+        "read_bytes": 0,
+        "write_bytes": 14299136
+      }
+    }
+  ],
+  "optimized": [
+    {
+      "round": 1,
+      "rows": 10000,
+      "dimension": 128,
+      "data_volume": "mvdb-json-f3a873d15dcc-data",
+      "seed": 20261109,
+      "cgroup_snapshots": [
+        {
+          "memory_peak_bytes": 6852608,
+          "io_read_bytes": 0,
+          "io_write_bytes": 8192
+        },
+        {
+          "memory_peak_bytes": 22351872,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 35872768,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36122624,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        }
+      ],
+      "queries": 1000,
+      "filtered_queries": 500,
+      "k": 10,
+      "search_mode": "exact",
+      "created_vector_index": false,
+      "write_seconds": 2.469,
+      "query_prepare_seconds": 0.141,
+      "query_seconds": 0.828,
+      "query_qps": 1207.73,
+      "io_write_phase": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "io_index_and_warmup": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_query_phase": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_total_after_create": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "cgroup_v2_memory_peak_bytes": 36122624,
+      "sampled_recall_at_10_unfiltered": 1.0,
+      "sampled_recall_at_10_filtered": 1.0,
+      "sampled_recall_queries": 1000,
+      "errors": null,
+      "io_whole_run": {
+        "read_bytes": 0,
+        "write_bytes": 14299136
+      }
+    },
+    {
+      "round": 2,
+      "rows": 10000,
+      "dimension": 128,
+      "data_volume": "mvdb-json-6c0f27ff8ae6-data",
+      "seed": 20261109,
+      "cgroup_snapshots": [
+        {
+          "memory_peak_bytes": 7172096,
+          "io_read_bytes": 0,
+          "io_write_bytes": 8192
+        },
+        {
+          "memory_peak_bytes": 21946368,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 35573760,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 35753984,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        }
+      ],
+      "queries": 1000,
+      "filtered_queries": 500,
+      "k": 10,
+      "search_mode": "exact",
+      "created_vector_index": false,
+      "write_seconds": 2.469,
+      "query_prepare_seconds": 0.156,
+      "query_seconds": 0.812,
+      "query_qps": 1231.53,
+      "io_write_phase": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "io_index_and_warmup": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_query_phase": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_total_after_create": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "cgroup_v2_memory_peak_bytes": 35753984,
+      "sampled_recall_at_10_unfiltered": 1.0,
+      "sampled_recall_at_10_filtered": 1.0,
+      "sampled_recall_queries": 1000,
+      "errors": null,
+      "io_whole_run": {
+        "read_bytes": 0,
+        "write_bytes": 14299136
+      }
+    },
+    {
+      "round": 3,
+      "rows": 10000,
+      "dimension": 128,
+      "data_volume": "mvdb-json-39703f718313-data",
+      "seed": 20261109,
+      "cgroup_snapshots": [
+        {
+          "memory_peak_bytes": 6610944,
+          "io_read_bytes": 0,
+          "io_write_bytes": 8192
+        },
+        {
+          "memory_peak_bytes": 22827008,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 36323328,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        },
+        {
+          "memory_peak_bytes": 40005632,
+          "io_read_bytes": 0,
+          "io_write_bytes": 14299136
+        }
+      ],
+      "queries": 1000,
+      "filtered_queries": 500,
+      "k": 10,
+      "search_mode": "exact",
+      "created_vector_index": false,
+      "write_seconds": 2.766,
+      "query_prepare_seconds": 0.172,
+      "query_seconds": 0.953,
+      "query_qps": 1049.32,
+      "io_write_phase": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "io_index_and_warmup": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_query_phase": {
+        "read_bytes": 0,
+        "write_bytes": 0
+      },
+      "io_total_after_create": {
+        "read_bytes": 0,
+        "write_bytes": 14290944
+      },
+      "cgroup_v2_memory_peak_bytes": 40005632,
+      "sampled_recall_at_10_unfiltered": 1.0,
+      "sampled_recall_at_10_filtered": 1.0,
+      "sampled_recall_queries": 1000,
+      "errors": null,
+      "io_whole_run": {
+        "read_bytes": 0,
+        "write_bytes": 14299136
+      }
+    }
+  ],
+  "baseline_median": {
+    "write_seconds": 2.859,
+    "query_seconds": 0.922,
+    "query_qps": 1084.6,
+    "cgroup_v2_memory_peak_bytes": 36261888
+  },
+  "optimized_median": {
+    "write_seconds": 2.469,
+    "query_seconds": 0.828,
+    "query_qps": 1207.73,
+    "cgroup_v2_memory_peak_bytes": 36122624
+  },
+  "write_speedup": 1.1579586877278252,
+  "query_speedup": 1.1135265700483092
+}

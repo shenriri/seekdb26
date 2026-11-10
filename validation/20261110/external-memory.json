@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "rows": 200000,
+  "dimension": 128,
+  "heap_bytes": 109400000,
+  "memory_max_bytes": 67108864,
+  "cgroup_memory_peak_bytes": 67108864,
+  "cgroup_snapshot": "109400000\n67108864\n67108864\nlow 0\nhigh 0\nmax 1918\noom 0\noom_kill 0\noom_group_kill 0\n",
+  "restart_checks": true,
+  "volume": "mvdb-external-f6c2890d3334-data",
+  "note": "Local reduced-memory stress; not all hidden acceptance cases."
+}

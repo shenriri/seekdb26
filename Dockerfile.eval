@@ -1,10 +1,12 @@
 # DEVELOPMENT/VERIFICATION IMAGE, NOT THE GRADING RUNTIME IMAGE.
 # Rebuild from C++ sources in the image. Keep the production Dockerfile separate.
-FROM ubuntu:24.04 AS verify
+FROM ubuntu:24.04@sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac AS verify
+COPY --from=python:3.11-slim-bookworm@sha256:f06d01d4ba3f8ad5af45a3ec87df19c1d317d8e8961edc0fabda61811af6f7cf /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+RUN sed -i "s|http://archive.ubuntu.com/ubuntu/|https://mirrors.ustc.edu.cn/ubuntu/|g; s|http://security.ubuntu.com/ubuntu/|https://mirrors.ustc.edu.cn/ubuntu/|g; s|Components:.*|Components: main universe|" /etc/apt/sources.list.d/ubuntu.sources
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      g++ cmake make ca-certificates python3 python3-numpy python3-psutil \
+      g++=4:13.2.0-7ubuntu1 cmake=3.28.3-1build7 make=4.3-4.1build2 ca-certificates=20260816ubuntu0.24.04.2 python3=3.12.3-0ubuntu2.1 python3-numpy=1:1.26.4+ds-6ubuntu1 python3-psutil=5.9.8-2build2 \
  && rm -rf /var/lib/apt/lists/*
 WORKDIR /work
 COPY CMakeLists.txt /work/

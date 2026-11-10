@@ -1,0 +1,23 @@
+{
+  "base_images": {
+    "ubuntu": "ubuntu:24.04@sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac",
+    "certificate_source": "python:3.11-slim-bookworm@sha256:f06d01d4ba3f8ad5af45a3ec87df19c1d317d8e8961edc0fabda61811af6f7cf"
+  },
+  "direct_packages": {
+    "g++": "4:13.2.0-7ubuntu1",
+    "cmake": "3.28.3-1build7",
+    "make": "4.3-4.1build2",
+    "ca-certificates": "20260816ubuntu0.24.04.2",
+    "libstdc++6": "14.2.0-4ubuntu2~24.04.1",
+    "python3": "3.12.3-0ubuntu2.1",
+    "python3-numpy": "1:1.26.4+ds-6ubuntu1",
+    "python3-psutil": "5.9.8-2build2"
+  },
+  "serialization": {
+    "library": "nlohmann/json",
+    "version": "3.11.3",
+    "license": "MIT",
+    "header_sha256": "9bea4c8066ef4a1c206b2be5a36302f8926f7fdc6087af5d20b417d0cf103ea6"
+  },
+  "note": "Base digests and direct apt versions are pinned; apt repository availability and transitive package changes remain external dependencies."
+}

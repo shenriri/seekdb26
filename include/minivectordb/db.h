@@ -4,10 +4,12 @@
 #include <string>
 #include <vector>
 namespace mvdb {
+enum class ResultType { Bigint, Text, Real, Vector };
 struct Result {
   bool ok = true;
   std::string error;
   std::vector<std::string> columns;
+  std::vector<ResultType> column_types;
   std::vector<std::vector<std::string>> rows;
   bool is_query = false;
   uint64_t affected_rows = 0;
@@ -19,6 +21,7 @@ class Database {
   Database(const Database&) = delete;
   Database& operator=(const Database&) = delete;
   Result execute(const std::string& sql);
+  void set_search_mode(bool ann_mode);
  private:
   struct Impl;
   std::unique_ptr<Impl> impl_;

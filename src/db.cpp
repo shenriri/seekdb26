@@ -317,7 +317,12 @@ uint32_t parse_u32(const std::string& s) {
 float parse_float32(const std::string& s) {
   require(!s.empty(),"INVALID_VECTOR_VALUE");
   errno=0;char* end=nullptr;
-  const double d=std::strtod(s.c_str(),&end);
+  double d=0;
+  const char* begin=s.data();
+  if(*begin=='+')++begin;
+  const auto parsed=std::from_chars(begin,s.data()+s.size(),d,std::chars_format::general);
+  if(parsed.ec==std::errc{} && parsed.ptr==s.data()+s.size())end=const_cast<char*>(parsed.ptr);
+  else d=std::strtod(s.c_str(),&end); // Preserve prior underflow and whitespace semantics.
   require(end==s.c_str()+s.size()&&std::isfinite(d)&&
           std::fabs(d)<=std::numeric_limits<float>::max(),"INVALID_VECTOR_VALUE");
   const float f=static_cast<float>(d);
@@ -1359,6 +1364,9 @@ struct Database::Impl {
     Result res;res.is_query=true;
     for(const auto& e:projections){auto p=compile(e);pp.push_back(std::move(p));
       res.columns.push_back(e.alias.empty()?(e.type==Expr::Distance?"l2_distance":e.col):e.alias);
+      res.column_types.push_back(e.type==Expr::Distance ? ResultType::Real :
+        (sch.cols[pp.back().col].type==ColType::Bigint ? ResultType::Bigint :
+         (sch.cols[pp.back().col].type==ColType::Vector ? ResultType::Vector : ResultType::Text)));
     }
     std::optional<PreparedExpr> order;
     if(s.order){
@@ -1644,6 +1652,7 @@ struct Database::Impl {
 
 Database::Database(const std::string& data_dir,bool ann_mode):impl_(std::make_unique<Impl>(data_dir,ann_mode)){}
 Database::~Database()=default;
+void Database::set_search_mode(bool ann_mode) { impl_->ann_mode=ann_mode; }
 Result Database::execute(const std::string& sql) {
   try{return impl_->execute(sql);}
   catch(const DbError& e){Result r;r.ok=false;r.error=e.what();return r;}

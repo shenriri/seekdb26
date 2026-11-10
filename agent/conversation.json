@@ -1,7 +1,7 @@
 {
   "schema_version": "1",
   "synthetic": false,
-  "scope": "Original phase1-6 user prompts and tool observations are preserved as historical records. local_validation_20261109 records later actual Windows Docker execution and supersedes historical statements that Docker/cgroup validation had not run. Student understanding is not inferred.",
+  "scope": "Original phase1-6 user prompts and tool observations are preserved as historical records. local_validation_20261109 records later actual Windows Docker execution and supersedes historical statements that Docker/cgroup validation had not run. Student understanding is not inferred. The later local_validation_20261110 supersedes the historical absence of a published protocol; all user prompts and agent/tool sources remain distinguished.",
   "user_prompts": [
     {
       "id": "user-1",
@@ -32,6 +32,16 @@
       "id": "user-phase6-continue-opt",
       "source": "student",
       "content": "继续优化直到优化点全部完成，性能到达最好"
+    },
+    {
+      "id": "user-published-jsonl-20261110",
+      "source": "student",
+      "content": "官方协议已经更新[https://github.com/oceanbase/seekdb/blob/2026-competition-round2/mysqltest/README.md](https://github.com/oceanbase/seekdb/blob/2026-competition-round2/mysqltest/README.md)，重新根据最新协议去完善我们的解题思路和代码，实现这个题目，性能尽最大程度优化"
+    },
+    {
+      "id": "user-push-20261110",
+      "source": "student",
+      "content": "推送到seekdb仓库"
     }
   ],
   "experiments": [
@@ -600,5 +610,612 @@
       "official_protocol_compatibility_verified": false
     },
     "agent_reflection": "API-adapter correctness is distinct from production wire compatibility. The official public branch does not provide enough protocol material to claim formal admission."
+  },
+  "local_validation_20261110": {
+    "source": "tool",
+    "summary": {
+      "upstream_protocol_commit": "f4d4e26653af823a7601668802f80e374ad6643c",
+      "official_published_protocol_check": {
+        "handshake": true,
+        "public_cases": "20/20",
+        "sql": "95/95"
+      },
+      "regression": "16/16",
+      "hard_memory_stress": {
+        "passed": true,
+        "rows": 200000,
+        "dimension": 128,
+        "heap_bytes": 109400000,
+        "memory_max_bytes": 67108864,
+        "cgroup_memory_peak_bytes": 67108864,
+        "cgroup_snapshot": "109400000\n67108864\n67108864\nlow 0\nhigh 0\nmax 1918\noom 0\noom_kill 0\noom_group_kill 0\n",
+        "restart_checks": true,
+        "volume": "mvdb-external-f6c2890d3334-data",
+        "note": "Local reduced-memory stress; not all hidden acceptance cases."
+      },
+      "performance": {
+        "baseline_median": {
+          "write_seconds": 2.859,
+          "query_seconds": 0.922,
+          "query_qps": 1084.6,
+          "cgroup_v2_memory_peak_bytes": 36261888
+        },
+        "optimized_median": {
+          "write_seconds": 2.469,
+          "query_seconds": 0.828,
+          "query_qps": 1207.73,
+          "cgroup_v2_memory_peak_bytes": 36122624
+        },
+        "write_speedup": 1.1579586877278252,
+        "query_speedup": 1.1135265700483092,
+        "order": [
+          "baseline-1",
+          "optimized-1",
+          "optimized-2",
+          "baseline-2",
+          "baseline-3",
+          "optimized-3"
+        ]
+      },
+      "runtime_image": "mvdb:json-final-20261110",
+      "runtime_binary_sha256": "fc71db5592113dfa26633d7a779d14e7f2c8f78c7c942e58a9f6f3ef5d4ac6e9",
+      "optimized_and_final_binary_identical": true,
+      "formal_hidden_admission_or_score": false,
+      "limitations": [
+        "64MiB serialized transaction cap; pending writes remain in memory",
+        "unbounded SQL result materialization; 16MiB official response limit must be considered",
+        "not all 29 formal acceptance cases have been executed",
+        "reported AB gain has visible single-round noise; no claim of global optimum"
+      ]
+    },
+    "official_public_result": {
+      "scope": "public-protocol-check",
+      "passed": true,
+      "cases": [
+        {
+          "id": "sql_crud",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 510
+        },
+        {
+          "id": "sql_comparisons",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 486
+        },
+        {
+          "id": "sql_ordering",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 469
+        },
+        {
+          "id": "sql_empty",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 468
+        },
+        {
+          "id": "sql_primary_key",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 445
+        },
+        {
+          "id": "sql_unicode",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 474
+        },
+        {
+          "id": "sql_bigint",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 455
+        },
+        {
+          "id": "sql_unsupported",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 483
+        },
+        {
+          "id": "storage_restart",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 815
+        },
+        {
+          "id": "vector_euclidean",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 442
+        },
+        {
+          "id": "transaction_commit",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 465
+        },
+        {
+          "id": "transaction_rollback",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 484
+        },
+        {
+          "id": "storage_mutations",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 767
+        },
+        {
+          "id": "storage_multiple_tables",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 830
+        },
+        {
+          "id": "vector_ties_and_filter",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 477
+        },
+        {
+          "id": "vector_float32",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 449
+        },
+        {
+          "id": "vector_index_maintenance",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 839
+        },
+        {
+          "id": "transaction_failed_insert",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 736
+        },
+        {
+          "id": "transaction_autocommit_atomic",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 773
+        },
+        {
+          "id": "transaction_shutdown_rollback",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 780
+        }
+      ],
+      "note": "Local diagnostic only; no performance/Agent scores or platform callbacks."
+    },
+    "official_handshake_result": {
+      "scope": "public-protocol-check",
+      "passed": true,
+      "cases": [
+        {
+          "id": "handshake",
+          "status": "PASS",
+          "message": "",
+          "duration_ms": 471
+        }
+      ],
+      "note": "Local diagnostic only; no performance/Agent scores or platform callbacks."
+    },
+    "ctest_output": "Internal ctest changing into directory: /work/build\nTest project /work/build\n      Start  1: json_protocol\n      Start  2: integration\n 1/16 Test  #1: json_protocol ....................   Passed    0.06 sec\n      Start  3: fault_injection\n 2/16 Test  #2: integration ......................   Passed    0.11 sec\n      Start  4: randomized_differential\n 3/16 Test  #3: fault_injection ..................   Passed    0.10 sec\n      Start  5: disk_btree_stress\n 4/16 Test  #5: disk_btree_stress ................   Passed    0.50 sec\n      Start  6: bounded_memory\n 5/16 Test  #4: randomized_differential ..........   Passed    1.23 sec\n      Start  7: wal_rotation\n 6/16 Test  #7: wal_rotation .....................   Passed    0.37 sec\n      Start  8: ann_transactional\n 7/16 Test  #8: ann_transactional ................   Passed    0.33 sec\n      Start  9: compaction_and_crash\n 8/16 Test  #9: compaction_and_crash .............   Passed    1.16 sec\n      Start 10: vector_scan_cache\n 9/16 Test #10: vector_scan_cache ................   Passed    0.45 sec\n      Start 11: deep_btree\n10/16 Test  #6: bounded_memory ...................   Passed    7.25 sec\n      Start 12: pk_btree_range\n11/16 Test #12: pk_btree_range ...................   Passed    0.53 sec\n      Start 13: mapped_vector_forced\n12/16 Test #13: mapped_vector_forced .............   Passed    0.27 sec\n      Start 14: mapped_vector_large\n13/16 Test #11: deep_btree .......................   Passed   10.63 sec\n      Start 15: official_public_basic_cases\n14/16 Test #15: official_public_basic_cases ......   Passed    0.10 sec\n      Start 16: simd_exact_differential\n15/16 Test #16: simd_exact_differential ..........   Passed    0.38 sec\n16/16 Test #14: mapped_vector_large ..............   Passed   12.71 sec\n\n100% tests passed, 0 tests failed out of 16\n\nTotal Test time (real) =  21.43 sec\n",
+    "alternating_ab": {
+      "classification": "local_JSONL_AB_not_official_scoring",
+      "order": [
+        "baseline-1",
+        "optimized-1",
+        "optimized-2",
+        "baseline-2",
+        "baseline-3",
+        "optimized-3"
+      ],
+      "baseline": [
+        {
+          "round": 1,
+          "rows": 10000,
+          "dimension": 128,
+          "data_volume": "mvdb-json-609558bbc184-data",
+          "seed": 20261109,
+          "cgroup_snapshots": [
+            {
+              "memory_peak_bytes": 6582272,
+              "io_read_bytes": 0,
+              "io_write_bytes": 8192
+            },
+            {
+              "memory_peak_bytes": 24629248,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36057088,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36261888,
+              "io_read_bytes": 36864,
+              "io_write_bytes": 14299136
+            }
+          ],
+          "queries": 1000,
+          "filtered_queries": 500,
+          "k": 10,
+          "search_mode": "exact",
+          "created_vector_index": false,
+          "write_seconds": 2.484,
+          "query_prepare_seconds": 0.141,
+          "query_seconds": 0.829,
+          "query_qps": 1206.27,
+          "io_write_phase": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "io_index_and_warmup": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_query_phase": {
+            "read_bytes": 36864,
+            "write_bytes": 0
+          },
+          "io_total_after_create": {
+            "read_bytes": 36864,
+            "write_bytes": 14290944
+          },
+          "cgroup_v2_memory_peak_bytes": 36261888,
+          "sampled_recall_at_10_unfiltered": 1.0,
+          "sampled_recall_at_10_filtered": 1.0,
+          "sampled_recall_queries": 1000,
+          "errors": null,
+          "io_whole_run": {
+            "read_bytes": 36864,
+            "write_bytes": 14299136
+          }
+        },
+        {
+          "round": 2,
+          "rows": 10000,
+          "dimension": 128,
+          "data_volume": "mvdb-json-dad9d6f936cc-data",
+          "seed": 20261109,
+          "cgroup_snapshots": [
+            {
+              "memory_peak_bytes": 6967296,
+              "io_read_bytes": 0,
+              "io_write_bytes": 8192
+            },
+            {
+              "memory_peak_bytes": 24760320,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36179968,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 39165952,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            }
+          ],
+          "queries": 1000,
+          "filtered_queries": 500,
+          "k": 10,
+          "search_mode": "exact",
+          "created_vector_index": false,
+          "write_seconds": 2.859,
+          "query_prepare_seconds": 0.157,
+          "query_seconds": 0.922,
+          "query_qps": 1084.6,
+          "io_write_phase": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "io_index_and_warmup": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_query_phase": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_total_after_create": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "cgroup_v2_memory_peak_bytes": 39165952,
+          "sampled_recall_at_10_unfiltered": 1.0,
+          "sampled_recall_at_10_filtered": 1.0,
+          "sampled_recall_queries": 1000,
+          "errors": null,
+          "io_whole_run": {
+            "read_bytes": 0,
+            "write_bytes": 14299136
+          }
+        },
+        {
+          "round": 3,
+          "rows": 10000,
+          "dimension": 128,
+          "data_volume": "mvdb-json-3017a38f3562-data",
+          "seed": 20261109,
+          "cgroup_snapshots": [
+            {
+              "memory_peak_bytes": 6868992,
+              "io_read_bytes": 0,
+              "io_write_bytes": 8192
+            },
+            {
+              "memory_peak_bytes": 24412160,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 35639296,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36048896,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            }
+          ],
+          "queries": 1000,
+          "filtered_queries": 500,
+          "k": 10,
+          "search_mode": "exact",
+          "created_vector_index": false,
+          "write_seconds": 2.891,
+          "query_prepare_seconds": 0.156,
+          "query_seconds": 0.922,
+          "query_qps": 1084.6,
+          "io_write_phase": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "io_index_and_warmup": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_query_phase": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_total_after_create": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "cgroup_v2_memory_peak_bytes": 36048896,
+          "sampled_recall_at_10_unfiltered": 1.0,
+          "sampled_recall_at_10_filtered": 1.0,
+          "sampled_recall_queries": 1000,
+          "errors": null,
+          "io_whole_run": {
+            "read_bytes": 0,
+            "write_bytes": 14299136
+          }
+        }
+      ],
+      "optimized": [
+        {
+          "round": 1,
+          "rows": 10000,
+          "dimension": 128,
+          "data_volume": "mvdb-json-f3a873d15dcc-data",
+          "seed": 20261109,
+          "cgroup_snapshots": [
+            {
+              "memory_peak_bytes": 6852608,
+              "io_read_bytes": 0,
+              "io_write_bytes": 8192
+            },
+            {
+              "memory_peak_bytes": 22351872,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 35872768,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36122624,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            }
+          ],
+          "queries": 1000,
+          "filtered_queries": 500,
+          "k": 10,
+          "search_mode": "exact",
+          "created_vector_index": false,
+          "write_seconds": 2.469,
+          "query_prepare_seconds": 0.141,
+          "query_seconds": 0.828,
+          "query_qps": 1207.73,
+          "io_write_phase": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "io_index_and_warmup": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_query_phase": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_total_after_create": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "cgroup_v2_memory_peak_bytes": 36122624,
+          "sampled_recall_at_10_unfiltered": 1.0,
+          "sampled_recall_at_10_filtered": 1.0,
+          "sampled_recall_queries": 1000,
+          "errors": null,
+          "io_whole_run": {
+            "read_bytes": 0,
+            "write_bytes": 14299136
+          }
+        },
+        {
+          "round": 2,
+          "rows": 10000,
+          "dimension": 128,
+          "data_volume": "mvdb-json-6c0f27ff8ae6-data",
+          "seed": 20261109,
+          "cgroup_snapshots": [
+            {
+              "memory_peak_bytes": 7172096,
+              "io_read_bytes": 0,
+              "io_write_bytes": 8192
+            },
+            {
+              "memory_peak_bytes": 21946368,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 35573760,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 35753984,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            }
+          ],
+          "queries": 1000,
+          "filtered_queries": 500,
+          "k": 10,
+          "search_mode": "exact",
+          "created_vector_index": false,
+          "write_seconds": 2.469,
+          "query_prepare_seconds": 0.156,
+          "query_seconds": 0.812,
+          "query_qps": 1231.53,
+          "io_write_phase": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "io_index_and_warmup": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_query_phase": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_total_after_create": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "cgroup_v2_memory_peak_bytes": 35753984,
+          "sampled_recall_at_10_unfiltered": 1.0,
+          "sampled_recall_at_10_filtered": 1.0,
+          "sampled_recall_queries": 1000,
+          "errors": null,
+          "io_whole_run": {
+            "read_bytes": 0,
+            "write_bytes": 14299136
+          }
+        },
+        {
+          "round": 3,
+          "rows": 10000,
+          "dimension": 128,
+          "data_volume": "mvdb-json-39703f718313-data",
+          "seed": 20261109,
+          "cgroup_snapshots": [
+            {
+              "memory_peak_bytes": 6610944,
+              "io_read_bytes": 0,
+              "io_write_bytes": 8192
+            },
+            {
+              "memory_peak_bytes": 22827008,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 36323328,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            },
+            {
+              "memory_peak_bytes": 40005632,
+              "io_read_bytes": 0,
+              "io_write_bytes": 14299136
+            }
+          ],
+          "queries": 1000,
+          "filtered_queries": 500,
+          "k": 10,
+          "search_mode": "exact",
+          "created_vector_index": false,
+          "write_seconds": 2.766,
+          "query_prepare_seconds": 0.172,
+          "query_seconds": 0.953,
+          "query_qps": 1049.32,
+          "io_write_phase": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "io_index_and_warmup": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_query_phase": {
+            "read_bytes": 0,
+            "write_bytes": 0
+          },
+          "io_total_after_create": {
+            "read_bytes": 0,
+            "write_bytes": 14290944
+          },
+          "cgroup_v2_memory_peak_bytes": 40005632,
+          "sampled_recall_at_10_unfiltered": 1.0,
+          "sampled_recall_at_10_filtered": 1.0,
+          "sampled_recall_queries": 1000,
+          "errors": null,
+          "io_whole_run": {
+            "read_bytes": 0,
+            "write_bytes": 14299136
+          }
+        }
+      ],
+      "baseline_median": {
+        "write_seconds": 2.859,
+        "query_seconds": 0.922,
+        "query_qps": 1084.6,
+        "cgroup_v2_memory_peak_bytes": 36261888
+      },
+      "optimized_median": {
+        "write_seconds": 2.469,
+        "query_seconds": 0.828,
+        "query_qps": 1207.73,
+        "cgroup_v2_memory_peak_bytes": 36122624
+      },
+      "write_speedup": 1.1579586877278252,
+      "query_speedup": 1.1135265700483092
+    },
+    "agent_reflection": "Published JSONL removes protocol ambiguity. Schema metadata preserves numeric-looking VARCHARs and BIGINTs without heuristic coercion; mode switching changes no transaction state. Coalesced writes preserve WAL and fsync ordering. Measured median gains have visible noise and do not prove a global optimum or hidden acceptance. No independent student interpretation was fabricated."
   }
 }

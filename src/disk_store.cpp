@@ -418,12 +418,33 @@ struct DiskStore::Impl {
   auto next_roots=roots;
   check(!staging,"BTREE_NESTED_STAGE");
   staging=true;staging_base=next_pid;
+  // Coalesce sequential writes without changing WAL/fsync/manifest ordering.
+  const char* setting=std::getenv("MVDB_BATCH_WRITES");
+  const bool batch=!setting || std::strcmp(setting,"0")!=0;
+  constexpr size_t WRITE_BATCH_LIMIT=1024u*1024u;
+  std::string heap_batch;
+  uint64_t heap_batch_start=heap_end;
+  if(batch)heap_batch.reserve(65536);
+  auto flush_heap=[&](){
+   if(!heap_batch.empty()){write_at(heap_fd,heap_batch_start,heap_batch);heap_batch.clear();}
+  };
   for(const auto& x:changes){
    auto& root=next_roots[x.table];
    Item item{x.pk,0,0};
-   if(x.row){auto [offset,length]=append_row(*x.row);item.offset=offset;item.length=length;}
+   if(x.row){
+    if(batch && x.row->size()+8<=WRITE_BATCH_LIMIT){
+     if(heap_batch.size()+x.row->size()+8>WRITE_BATCH_LIMIT)flush_heap();
+     if(heap_batch.empty())heap_batch_start=heap_end;
+     item.offset=heap_end;item.length=uint32_t(x.row->size());
+     put32(heap_batch,item.length);put32(heap_batch,crc(*x.row));heap_batch+=*x.row;
+     heap_end+=8+x.row->size();
+    }else{
+     flush_heap();auto [offset,length]=append_row(*x.row);item.offset=offset;item.length=length;
+    }
+   }
    root=put(root,item);
   }
+  flush_heap();
   // Crash before index publication; the durable WAL will reconstruct this batch.
   failpoint("after_heap_before_index");
   // Compact the transient COW tree to live nodes only, in child-first order.
@@ -438,11 +459,21 @@ struct DiskStore::Impl {
     order.push_back(pid);
   };
   for(const auto& [_,root]:next_roots)if(root)visit(root);
+  std::string page_batch;
+  uint64_t page_batch_start=staging_base*PAGE;
+  if(batch)page_batch.reserve(65536);
   for(uint64_t old_id:order){
     auto n=staged.at(old_id);
     if(!n.leaf)for(auto& child:n.children){if(child>=staging_base)child=rewritten.at(child);}
-    write_at(page_fd,rewritten.at(old_id)*PAGE,serialize(n));
+    const uint64_t offset=rewritten.at(old_id)*PAGE;
+    auto bytes=serialize(n);
+    if(batch){
+     if(page_batch.empty())page_batch_start=offset;
+     page_batch+=bytes;
+     if(page_batch.size()>=WRITE_BATCH_LIMIT){write_at(page_fd,page_batch_start,page_batch);page_batch.clear();}
+    }else write_at(page_fd,offset,bytes);
   }
+  if(!page_batch.empty())write_at(page_fd,page_batch_start,page_batch);
   for(auto& [_,root]:next_roots)if(root>=staging_base)root=rewritten.at(root);
   next_pid=staging_base+order.size();
   staging=false;staged.clear();cache.clear();lru.clear();
